@@ -1,5 +1,10 @@
 vim.keymap.set('n', '-', '<CMD>Oil --float<CR>', { desc = 'Open parent Directory in Oil' })
 
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
+
+-- Diagnostic keymaps
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
+
 vim.keymap.set('n', 'gf', function()
   vim.diagnostic.open_float()
 end, { desc = 'Open diagnostics in float' })
@@ -26,4 +31,28 @@ vim.keymap.set('t', '<C-Right>', '<cmd>vertical resize -2<CR>', { desc = 'Resize
 vim.keymap.set('n', '<leader>ec', '<cmd>edit $MYVIMRC<CR>', { desc = 'Edit Neovim config' })
 
 -- Exit terminal mode
-vim.keymap.set('t', '<C-w>h', "<C-\\><C-n><C-w>h",{silent = true})
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Disable arrow keys in all modes
+-- local modes = { 'n', 'i', 'v', 'c', 't', 'o', 's', 'x' } -- All possible modes
+local modes = { 'n', 'i', 'v', 'o', 't', 's', 'x' } -- All possible modes
+local arrows = { '<Up>', '<Down>', '<Left>', '<Right>' }
+
+for _, mode in ipairs(modes) do
+  for _, key in ipairs(arrows) do
+    vim.keymap.set(mode, key, '<Nop>', { noremap = true, silent = true })
+  end
+end
+
+local enabledModes = { 'i', 'c', 'o', 't', 's', 'x' }
+-- Map Alt + hjkl in Insert mode
+for _, mode in ipairs(enabledModes) do
+  vim.keymap.set(mode, '<A-h>', '<Left>', { noremap = true, silent = true })
+  vim.keymap.set(mode, '<A-j>', '<Down>', { noremap = true, silent = true })
+  vim.keymap.set(mode, '<A-k>', '<Up>', { noremap = true, silent = true })
+  vim.keymap.set(mode, '<A-l>', '<Right>', { noremap = true, silent = true })
+end
+
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {
+  desc = "Code actions",
+})

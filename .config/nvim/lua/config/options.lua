@@ -1,14 +1,28 @@
-vim.opt.expandtab = true -- Convert tabs to spaces
-vim.opt.tabstop = 4 -- How many spaces are shown per Tab
-vim.opt.shiftwidth = 4 -- Amount to indent with << and >>
+vim.g.have_nerd_font = true
+
+-- Convert tabs to spaces
+vim.opt.expandtab = true
+
+-- How many spaces are shown per Tab
+vim.opt.tabstop = 4
+
+-- Amount to indent with << and >>
+vim.opt.shiftwidth = 4
 
 vim.opt.smarttab = true
 vim.opt.smartindent = true
-vim.opt.autoindent = true -- Keep identation from previous line
+
+-- Keep identation from previous line
+vim.opt.autoindent = true
 
 -- Always show relative line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
+
+-- Sync clipboard between OS and Neovim
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
 
 -- Show line under cursor
 vim.opt.cursorline = true
@@ -35,6 +49,9 @@ vim.opt.signcolumn = 'yes'
 -- Decrease update time
 vim.opt.updatetime = 250
 
+-- Decrease mapped sequence wait time
+vim.opt.timeoutlen = 300
+
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -49,14 +66,15 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 5
+vim.opt.scrolloff = 10
+
+-- Instead of exit error, ask if want to save
+vim.opt.confirm = true
 
 -- Disable commandline until it is needed. This gives us a cleaner look and an extra line ;)
 vim.opt.cmdheight = 1
 
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+
 
 -- Highlight text for some time after yanking
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -70,7 +88,29 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- Check if running on Windows
 is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-
 if is_windows then
     vim.o.shell = "powershell.exe"
 end
+
+-- LSP diagnostic icons
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN]  = " ",
+      [vim.diagnostic.severity.HINT]  = " ",
+      [vim.diagnostic.severity.INFO]  = " ",
+    },
+  },
+  underline = true,
+})
+
+for _, type in ipairs({ "Error", "Warn", "Hint", "Info" }) do
+  vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. type, {
+    underline = true,
+  })
+end
+
+
+
+
