@@ -74,7 +74,8 @@ vim.opt.confirm = true
 -- Disable commandline until it is needed. This gives us a cleaner look and an extra line ;)
 vim.opt.cmdheight = 1
 
-
+-- For Avante.nvim
+vim.opt.laststatus = 3
 
 -- Highlight text for some time after yanking
 vim.api.nvim_create_autocmd('TextYankPost', {

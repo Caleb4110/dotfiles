@@ -4,7 +4,7 @@ return {
   build = ':TSUpdate',
   config = function()
     vim.api.nvim_create_autocmd('FileType', {
-      pattern = { '<filetype>' },
+      pattern = { 'python', 'c' },
       callback = function()
         vim.treesitter.start()
       end,
